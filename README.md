@@ -9,24 +9,23 @@
 
   ```
 
-  version: '3'
+    version: 3
+    services:
+    db:
+    container_name: postgres_database
+    image: postgres:15.1
+    volumes: - postgres-db:/var/lib/postgresql/data
+    environment: - POSTGRES_PASSWORD=123456
 
-services:
-db:
-container_name: postgres_database
-image: postgres:15.1
-volumes: - postgres-db:/var/lib/postgresql/data
-environment: - POSTGRES_PASSWORD=123456
+    pgAdmin:
+    depends_on: - db
+    image: dpage/pgadmin4:6.17
+    ports: - "8080:80"
+    environment: - PGADMIN_DEFAULT_PASSWORD=123456 - PGADMIN_DEFAULT_EMAIL=superman@google.com
 
-pgAdmin:
-depends_on: - db
-image: dpage/pgadmin4:6.17
-ports: - "8080:80"
-environment: - PGADMIN_DEFAULT_PASSWORD=123456 - PGADMIN_DEFAULT_EMAIL=superman@google.com
-
-volumes:
-postgres-db:
-external: true
+    volumes:
+    postgres-db:
+    external: true
 
     ```
 
@@ -38,30 +37,28 @@ external: true
 
 
   ```
+    version: 3
 
+    services:
+    db:
+        container_name: postgres_database
+        image: postgres:15.1
+        volumes:
+        # - postgres-db:/var/lib/postgresql/data # ejemplo
+        - ./postgres:/var/lib/postgresql/data
+        environment:
+        - POSTGRES_PASSWORD=123456
 
-version: '3'
-
-services:
-  db:
-    container_name: postgres_database
-    image: postgres:15.1
-    volumes:
-      # - postgres-db:/var/lib/postgresql/data # ejemplo
-      - ./postgres:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=123456
-
-  pgAdmin:
-    depends_on:
-      - db
-    image: dpage/pgadmin4:6.17
-    ports:
-      - "8080:80"
-    volumes:
-      - ./pgadmin:/var/lib/pgadmin
-    environment:
-      - PGADMIN_DEFAULT_PASSWORD=123456 
-      - PGADMIN_DEFAULT_EMAIL=superman@google.com
+    pgAdmin:
+        depends_on:
+        - db
+        image: dpage/pgadmin4:6.17
+        ports:
+        - "8080:80"
+        volumes:
+        - ./pgadmin:/var/lib/pgadmin
+        environment:
+        - PGADMIN_DEFAULT_PASSWORD=123456 
+        - PGADMIN_DEFAULT_EMAIL=superman@google.com
 
   ```
